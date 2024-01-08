@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Plotly.js -->
+        <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      </head>
+      
+      <body>
+        <div id="myDiv" style="width: 1080px; height: 500px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+        <script>
+        function makeplot() {
+  Plotly.d3.csv("data/Airbag_vp_Plot1.csv", function(data){ processData(data) } );
+
+};
+  
+function processData(allRows) {
+
+  console.log(allRows);
+  var x = [], y = [], y1 = [], y2 = [] , y3 = [] , y4 = [] , y5 = [] , standard_deviation = [];
+
+  for (var i=0; i<allRows.length; i++) {
+    row = allRows[i];
+    x.push( row['time'] );
+    y.push( row['max1'] );
+    y1.push(row ['min1']);
+    y2.push(row ['max2']);
+    y3.push(row ['min2']);
+    y4.push(row ['min3']);
+    y5.push(row ['max3']);
+  }
+  console.log( 'X',x, 'Y',y, 'SD',standard_deviation );
+  makePlotly( x, y, y1,y2 , y3 , y4 , y5 , standard_deviation );
+}
+
+function makePlotly( x, y, y1, y2 , y3 , y4 , y5, standard_deviation ){
+  var plotDiv = document.getElementById("plot");
+  var traces = [{
+    x: x, 
+    y: y
+  },{
+    x: x,
+    y: y1,
+    yaxis: 'y2',
+    type: 'scatter'
+  },{
+    x: x,
+    y: y2,
+    yaxis: 'y3',
+    type: 'scatter'},{
+        x: x,
+    y: y3,
+    yaxis: 'y4',
+    type: 'scatter'  
+    },{
+        x: x,
+    y: y4,
+    yaxis: 'y5',
+    type: 'scatter' 
+    },{
+        x: x,
+    y: y5,
+    yaxis: 'y6',
+    type: 'scatter' 
+    } ];
+  
+    var layout = {
+    title: 'multiple y-axis example',
+    width: 1000,
+    xaxis: {domain: [0.3, 0.7]},
+    yaxis: {
+      title: 'min1',
+      titlefont: {color: '#1f77b4'},
+      tickfont: {color: '#1f77b4'}
+    },
+    yaxis2: {
+      title: 'max1',
+      titlefont: {color: '#ff7f0e'},
+      tickfont: {color: '#ff7f0e'},
+      anchor: 'free',
+      overlaying: 'y',
+      side: 'left',
+      position: 0.15
+    },
+    yaxis3: {
+      title: 'min2',
+      titlefont: {color: '#d62728'},
+      tickfont: {color: '#d62728'},
+      anchor:'free',
+      overlaying: 'y',
+      side: 'left',
+      position : 0
+    },
+    yaxis4: {
+      title: 'max2',
+      titlefont: {color: '#9467bd'},
+      tickfont: {color: '#9467bd'},
+      anchor: 'x',
+      overlaying: 'y',
+      side: 'right',
+    },
+    yaxis5: {
+      title: 'min3',
+      titlefont: {color: '#m657bd'},
+      tickfont: {color: '#3467bd'},
+      anchor :'free',
+      overlaying: 'y',
+      side: 'right',
+      position: 0.85
+    },
+    yaxis6: {
+      title: 'max3',
+      titlefont: {color: '#f467bd'},
+      tickfont: {color: '#7467bd'},
+      anchor: 'free',
+      overlaying: 'y',
+      side: 'right',
+      position : 0.95
+    }
+   };
+  Plotly.newPlot('myDiv', traces, layout,
+    {title: 'Plotting CSV data from AJAX call'});
+};
+  makeplot();
+        </script>
+      </body>
+      
+</html>
